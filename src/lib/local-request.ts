@@ -5,7 +5,9 @@ export function isSameLocalOrigin(request: Request): boolean {
   try {
     const actual = new URL(origin);
     const expected = new URL(allowed);
-    return actual.origin === expected.origin && ["127.0.0.1", "localhost", "[::1]"].includes(actual.hostname);
+    const loopbackHosts = ["127.0.0.1", "localhost", "[::1]"];
+    return actual.protocol === expected.protocol && actual.port === expected.port &&
+      loopbackHosts.includes(actual.hostname) && loopbackHosts.includes(expected.hostname);
   } catch {
     return false;
   }
